@@ -25,7 +25,7 @@ const LoginForm = () => {
             placeholder="*****"
             type="password"
           ></FormElement>
-          <ButtonElement variant="bg-black" type="submit">Login</ButtonElement>
+          <ButtonElement variant="bg-black w-full" type="submit">Login</ButtonElement>
         </div>
       </form>
     </>

@@ -30,7 +30,7 @@ const RegisterForm = () => {
             placeholder="*****"
             type="password"
           ></FormElement>
-          <ButtonElement variant="bg-black">Register</ButtonElement>
+          <ButtonElement variant="bg-black w-full">Register</ButtonElement>
         </div>
       </form>
     </>

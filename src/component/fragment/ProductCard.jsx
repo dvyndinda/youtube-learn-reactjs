@@ -3,7 +3,7 @@ import ButtonElement from "../element/button/ButtonElement";
 const ProductCard = ({children}) => {
   return (
     <>
-      <div className="w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg shadow mx-2 flex flex-col justify-between">
+      <div className="w-full max-w-sm bg-gray-800 border border-gray-700 rounded-lg shadow mx-2 my-2 flex flex-col justify-between">
         {children}
       </div>
     </>
@@ -41,12 +41,12 @@ const BodyCard = ({name, children}) => {
   );
 };
 
-const DetailCard = ({price}) => {
+const DetailCard = ({price, addToCard, id}) => {
   return (
     <>
       <div className="flex items-center justify-between px-5 py-5">
-        <span className="text-lg font-bold text-white mr-5">{price}</span>
-        <ButtonElement variant="bg-blue-600">Add To Cart</ButtonElement>
+        <span className="text-lg font-bold text-white mr-5">Rp {price.toLocaleString('id-ID', {styles: 'currency', currency: 'IDR'})}</span>
+        <ButtonElement variant="bg-blue-600" onClick={() => addToCard({ id })}>Add To Cart</ButtonElement>
       </div>
     </>
   );
