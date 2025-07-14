@@ -1,42 +1,52 @@
 import { useEffect, useState, useRef } from "react";
 import ButtonElement from "../element/button/ButtonElement";
 import ProductCard from "../fragment/ProductCard";
+import { getProduct } from "../../service/product.service";
+import { getUsername } from "../../service/auth.service";
 
-const products = [
-  {
-    id: 1,
-    name: "Sepatu Baru",
-    price: 1000000,
-    image: "/image/shoes-1.jpg",
-    description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
-            officiis placeat maiores! Officia eius est placeat deleniti harum
-            ullam pariatur nobis, quo molestias quasi nostrum natus facere,
-            ducimus delectus quibusdam!`,
-  },
-  {
-    id: 2,
-    name: "Sepatu Lama",
-    price: 500000,
-    image: "/image/shoes-1.jpg",
-    description: `Lorem ipsum dolor sit amet consectetur adipisicing elit.`,
-  },
-  {
-    id: 3,
-    name: "Sepatu Ada",
-    price: 750000,
-    image: "/image/shoes-1.jpg",
-    description: `Officia eius est placeat deleniti harum
-            ullam pariatur nobis, quo molestias quasi nostrum natus facere.`,
-  },
-];
+// const products = [
+//   {
+//     id: 1,
+//     name: "Sepatu Baru",
+//     price: 1000000,
+//     image: "/image/shoes-1.jpg",
+//     description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
+//             officiis placeat maiores! Officia eius est placeat deleniti harum
+//             ullam pariatur nobis, quo molestias quasi nostrum natus facere,
+//             ducimus delectus quibusdam!`,
+//   },
+//   {
+//     id: 2,
+//     name: "Sepatu Lama",
+//     price: 500000,
+//     image: "/image/shoes-1.jpg",
+//     description: `Lorem ipsum dolor sit amet consectetur adipisicing elit.`,
+//   },
+//   {
+//     id: 3,
+//     name: "Sepatu Ada",
+//     price: 750000,
+//     image: "/image/shoes-1.jpg",
+//     description: `Officia eius est placeat deleniti harum
+//             ullam pariatur nobis, quo molestias quasi nostrum natus facere.`,
+//   },
+// ];
 
 const email = localStorage.getItem("email");
+const token = localStorage.getItem("token");
 
 const ProductPage = () => {
   const [cart, setCart] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [products, setProduct] = useState([]);
+  const [username, setUsername] = useState("");
+
   useEffect(() => {
     setCart(JSON.parse(localStorage.getItem("cart")) || []);
+  }, []);
+
+  useEffect(() => {
+    setUsername(getUsername(token));
   }, []);
 
   useEffect(() => {
@@ -95,10 +105,17 @@ const ProductPage = () => {
     }
   }, [cart]);
 
+  useEffect(() => {
+    getProduct((data) => {
+      // console.log(data);
+      setProduct(data);
+    });
+  }, []);
+
   return (
     <>
       <div className="flex justify-end h-20 bg-blue-600 text-white items-center px-10">
-        {email}
+        {username}
         <ButtonElement variant="bg-black ml-5" onClick={handleLogout}>
           Logout
         </ButtonElement>
@@ -108,7 +125,7 @@ const ProductPage = () => {
           {products.map((product) => (
             <ProductCard key={product.id}>
               <ProductCard.HeaderCard image={product.image} />
-              <ProductCard.BodyCard name={product.name}>
+              <ProductCard.BodyCard name={product.title}>
                 {product.description}
               </ProductCard.BodyCard>
               <ProductCard.DetailCard
@@ -137,13 +154,13 @@ const ProductPage = () => {
               </tr>
             </thead>
             <tbody>
-              {cart.map((item) => {
+              {cart.length > 0 && cart.map((item) => {
                 const product = products.find(
                   (product) => product.id === item.id
                 );
                 return (
                   <tr key={item.id}>
-                    <td>{product.name}</td>
+                    <td>{product.title}</td>
                     <td>
                       Rp{" "}
                       {product.price.toLocaleString("id-ID", {

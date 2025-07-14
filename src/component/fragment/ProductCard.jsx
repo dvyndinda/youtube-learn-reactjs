@@ -17,7 +17,7 @@ const HeaderCard = ({image}) => {
         <img
           src={image}
           alt="product"
-          className="p-5 rounded-lg"
+          className="p-5 rounded-lg h-60 w-full object-cover"
         />
       </a>
     </>

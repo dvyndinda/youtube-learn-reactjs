@@ -1,13 +1,28 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ButtonElement from "../element/button/ButtonElement";
 import FormElement from "../element/input/FormElement";
+import { postLogin } from "../../service/auth.service";
 
 const LoginForm = () => {
+  const [loginFailed, setLoginFailed] = useState("");
   const handleLogin = (e) => {
     e.preventDefault();
-    localStorage.setItem('email', e.target.email.value);
-    localStorage.setItem('password', e.target.password.value);
-    window.location.href = "/product"
+    // localStorage.setItem('email', e.target.email.value);
+    // localStorage.setItem('password', e.target.password.value);
+    // window.location.href = "/product"
+    const credential = {
+      username: e.target.email.value,
+      password: e.target.password.value,
+    }
+    postLogin(credential, (status, res) => {
+      console.log(credential);
+      if (status) { 
+        localStorage.setItem('token', res);
+        window.location.href = "/product"
+      } else {
+        setLoginFailed(res.response.data);
+      }
+    });
   }
 
   const emailRef = useRef(null);
@@ -18,6 +33,7 @@ const LoginForm = () => {
 
   return (
     <>
+      { loginFailed && <p className="text-red-500">{loginFailed}</p>}
       <form onSubmit={handleLogin}>
         <div className="mb-6">
           <FormElement
